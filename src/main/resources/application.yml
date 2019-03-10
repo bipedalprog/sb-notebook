@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+orientdb:
+  connectionString: plocal:/home/bipedal/data/sb-notebook/orient
+  user: admin
+  password: admin
+
+dataPath: /home/bipedal/data/sb-notebook
+
+---
+spring:
+  profiles: test
+
+
+orientdb:
+  connectionString: memory:test
+  user: admin
+  password: admin
+
+dataPath: /tmp/test
