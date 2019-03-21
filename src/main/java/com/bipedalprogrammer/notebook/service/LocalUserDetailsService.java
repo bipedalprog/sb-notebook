@@ -1,7 +1,7 @@
 package com.bipedalprogrammer.notebook.service;
 
 import com.bipedalprogrammer.notebook.sbthyme.repository.UserPersistence;
-import com.bipedalprogrammer.notebook.sbthyme.model.User;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

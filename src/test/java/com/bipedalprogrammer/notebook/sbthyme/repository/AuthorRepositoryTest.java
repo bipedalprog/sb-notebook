@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.model.Author;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

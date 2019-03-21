@@ -1,7 +1,7 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.model.Author;
-import com.bipedalprogrammer.notebook.sbthyme.model.Document;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.bipedalprogrammer.notebook.sbthyme.model.Author.AUTHOR_DEFAULT_ID;
+import static com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author.AUTHOR_DEFAULT_ID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsEqual.equalTo;

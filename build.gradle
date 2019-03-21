@@ -3,6 +3,7 @@ plugins {
     id 'java'
 }
 
+apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.bipedalprogrammer.notebook'
@@ -16,6 +17,10 @@ repositories {
 
 bootRun {
     jvmArgs = ["-Dstorage.wal.allowDirectIO=false"]
+}
+
+test {
+    jvmArgs '-Dstorage.wal.allowDirectIO=false'
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package com.bipedalprogrammer.notebook.sbthyme.model;
+package com.bipedalprogrammer.notebook.sbthyme.repository.verticies;
 
 public class Author {
     public static long AUTHOR_DEFAULT_ID = -1L;

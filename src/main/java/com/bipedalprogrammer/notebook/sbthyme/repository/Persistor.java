@@ -1,7 +1,7 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.model.Author;
-import com.bipedalprogrammer.notebook.sbthyme.model.Document;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Document;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.ODirection;
 import com.orientechnologies.orient.core.record.OEdge;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
-import static com.bipedalprogrammer.notebook.sbthyme.model.Author.AUTHOR_DEFAULT_ID;
+import static com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author.AUTHOR_DEFAULT_ID;
 import static com.bipedalprogrammer.notebook.sbthyme.repository.OrientStore.*;
 
 public class Persistor {

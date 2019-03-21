@@ -1,4 +1,4 @@
-package com.bipedalprogrammer.notebook.sbthyme.model;
+package com.bipedalprogrammer.notebook.sbthyme.repository.verticies;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
