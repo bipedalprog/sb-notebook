@@ -24,6 +24,9 @@ public class Persistor {
     private static final String FIND_AUTHOR_BY_ID = "SELECT FROM Authors where authorId = ?";
     private Logger logger = LoggerFactory.getLogger(Persistor.class);
 
+    public Persistor(OrientStore orientStore) {
+        this.orientStore = orientStore;
+    }
 
     protected OVertex createAuthor(ODatabaseSession db, String firstName, String lastName, String emailAddress) {
         Long authorId = db.getMetadata().getSequenceLibrary().getSequence(AUTHOR_SEQUENCE).next();

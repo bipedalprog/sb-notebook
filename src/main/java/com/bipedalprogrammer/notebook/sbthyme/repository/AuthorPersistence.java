@@ -28,7 +28,7 @@ public class AuthorPersistence extends Persistor {
 
     @Autowired
     public AuthorPersistence(OrientStore orientStore) {
-        super.orientStore = orientStore;
+        super(orientStore);
     }
 
     public Author newAuthor(String firstName, String lastName, String emailAddress) {

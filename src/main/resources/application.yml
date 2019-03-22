@@ -6,7 +6,9 @@ orientdb:
   user: admin
   password: admin
 
-dataPath: /home/bipedal/data/sb-notebook
+file-store:
+  protocol: file
+  base-path: /home/bipedal/data/sb-notebook/files
 
 ---
 spring:
@@ -18,4 +20,6 @@ orientdb:
   user: admin
   password: admin
 
-dataPath: /tmp/test
+file-store:
+  protocol: file
+  base-path: /tmp/test

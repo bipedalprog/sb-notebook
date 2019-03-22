@@ -25,7 +25,7 @@ public class DocumentPersistence extends Persistor {
 
     @Autowired
     public DocumentPersistence(OrientStore orientStore) {
-        this.orientStore = orientStore;
+        super(orientStore);
     }
 
     public Document newDocument(Document document) {

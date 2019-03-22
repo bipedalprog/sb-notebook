@@ -1,4 +1,4 @@
-package com.bipedalprogrammer.notebook.service;
+package com.bipedalprogrammer.notebook.sbthyme.service;
 
 import com.bipedalprogrammer.notebook.sbthyme.repository.UserPersistence;
 import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.User;
