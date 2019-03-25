@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.User;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.UserObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.sql.executor.OResult;
@@ -41,11 +41,11 @@ public class UserPersistence {
             user.setProperty(USER_EMAIL, username);
             user.setProperty(USER_PASSWORD, encoder.encode(password));
             user.setProperty(OrientStore.USER_ENABLED, true);
-            user.setProperty(OrientStore.USER_ROLES, User.ROLE_USER);
+            user.setProperty(OrientStore.USER_ROLES, UserObject.ROLE_USER);
             OVertex saved = db.save(user);
-            logger.info("User saved at RID: {}", saved.getRecord().getIdentity().toStream());
+            logger.info("UserObject saved at RID: {}", saved.getRecord().getIdentity().toStream());
         } catch (ORecordDuplicatedException dup) {
-            logger.info("User {} already exists.", username);
+            logger.info("UserObject {} already exists.", username);
             return false;
         } catch (Exception e) {
             logger.error("addUser failed.", e);
@@ -54,41 +54,41 @@ public class UserPersistence {
         return true;
     }
 
-    public User findByUsername(String username) {
-        User user = new User();
+    public UserObject findByUsername(String username) {
+        UserObject userObject = new UserObject();
         try (ODatabaseSession db = orientStore.getSession()) {
             OVertex vertex = loadUser(db, username);
             if (vertex == null) {
-                logger.info("User {} was not found.", username);
+                logger.info("UserObject {} was not found.", username);
             }
-            user = userFromVertex(vertex);
+            userObject = userFromVertex(vertex);
         } catch (Exception ex) {
-            logger.info("Unable to load user.", ex);
+            logger.info("Unable to load userObject.", ex);
         }
-        return user;
+        return userObject;
     }
 
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
+    public List<UserObject> findAll() {
+        List<UserObject> userObjects = new ArrayList<>();
         try (ODatabaseSession db = orientStore.getSession()) {
             try (OResultSet rs = db.query(FIND_ALL_USERS)) {
                 if (rs.hasNext()) {
                     OResult result = rs.next();
                     result.getVertex().ifPresent(v -> {
-                        users.add(userFromVertex(v));
+                        userObjects.add(userFromVertex(v));
                     });
                 }
             }
         } catch (Exception ex) {
-            logger.info("Unable to find users.", ex);
+            logger.info("Unable to find userObjects.", ex);
         }
-        return users;
+        return userObjects;
     }
 
-    public boolean delete(User user) {
+    public boolean delete(UserObject userObject) {
         boolean success = true;
         try (ODatabaseSession db = orientStore.getSession()) {
-            OVertex vertex = loadUser(db, user.getUsername());
+            OVertex vertex = loadUser(db, userObject.getUsername());
             if (vertex != null) db.delete(vertex);
         } catch (Exception ex) {
             logger.info("Delete failed.", ex);
@@ -97,8 +97,8 @@ public class UserPersistence {
         return success;
     }
 
-    private User userFromVertex(OVertex v) {
-        User u = new User();
+    private UserObject userFromVertex(OVertex v) {
+        UserObject u = new UserObject();
         u.setUsername(v.getProperty(USER_EMAIL));
         u.setPassword(v.getProperty(USER_PASSWORD));
         u.setEnabled(v.getProperty(USER_ENABLED));

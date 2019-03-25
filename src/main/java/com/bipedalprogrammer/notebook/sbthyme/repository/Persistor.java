@@ -1,7 +1,7 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author;
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Document;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.AuthorObject;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.DocumentObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.ODirection;
 import com.orientechnologies.orient.core.record.OEdge;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
-import static com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author.AUTHOR_DEFAULT_ID;
+import static com.bipedalprogrammer.notebook.sbthyme.repository.verticies.AuthorObject.AUTHOR_DEFAULT_ID;
 import static com.bipedalprogrammer.notebook.sbthyme.repository.OrientStore.*;
 
 public class Persistor {
@@ -39,11 +39,11 @@ public class Persistor {
         return saved;
     }
 
-    protected void authorFromVertex(Author author, OVertex v) {
-        author.setAuthorId(v.getProperty(AUTHOR_ID));
-        author.setFirstName(v.getProperty(AUTHOR_FIRST_NAME));
-        author.setLastName(v.getProperty(AUTHOR_LAST_NAME));
-        author.setEmailAddress(v.getProperty(AUTHOR_EMAIL));
+    protected void authorFromVertex(AuthorObject authorObject, OVertex v) {
+        authorObject.setAuthorId(v.getProperty(AUTHOR_ID));
+        authorObject.setFirstName(v.getProperty(AUTHOR_FIRST_NAME));
+        authorObject.setLastName(v.getProperty(AUTHOR_LAST_NAME));
+        authorObject.setEmailAddress(v.getProperty(AUTHOR_EMAIL));
     }
 
     protected OVertex loadAuthor(ODatabaseSession db, long authorId) {
@@ -69,15 +69,15 @@ public class Persistor {
         }
     }
 
-    protected void setVertexProperties(OVertex v, Document document) {
-        v.setProperty(DOCUMENT_TITLE, document.getTitle());
-        v.setProperty(DOCUMENT_VERSION, document.getRevision());
-        v.setProperty(DOCUMENT_REVISION_DATE, document.getRevisionDate());
-        v.setProperty(DOCUMENT_BODY, document.getBody());
+    protected void setVertexProperties(OVertex v, DocumentObject documentObject) {
+        v.setProperty(DOCUMENT_TITLE, documentObject.getTitle());
+        v.setProperty(DOCUMENT_VERSION, documentObject.getRevision());
+        v.setProperty(DOCUMENT_REVISION_DATE, documentObject.getRevisionDate());
+        v.setProperty(DOCUMENT_BODY, documentObject.getBody());
     }
 
-    protected Document documentFromVertex(OVertex v) {
-        Document d = new Document();
+    protected DocumentObject documentFromVertex(OVertex v) {
+        DocumentObject d = new DocumentObject();
         d.setDocumentId(v.getProperty(DOCUMENT_ID));
         d.setTitle(v.getProperty(DOCUMENT_TITLE));
         d.setRevision(v.getProperty(DOCUMENT_VERSION));
@@ -86,27 +86,27 @@ public class Persistor {
         return d;
     }
 
-    protected Set<OVertex> resolveAuthors(ODatabaseSession db, OVertex document, Set<Author> authors) {
+    protected Set<OVertex> resolveAuthors(ODatabaseSession db, OVertex document, Set<AuthorObject> authorObjects) {
         Set<OVertex> vertices = new HashSet<>();
         Iterable<OVertex> existing = document.getVertices(ODirection.OUT, DOCUMENT_AUTHOR_SCHEMA);
-        for (Author author : authors) {
-            if (author.getAuthorId() != AUTHOR_DEFAULT_ID) {
-                OVertex vertex = loadAuthor(db, author.getAuthorId());
+        for (AuthorObject authorObject : authorObjects) {
+            if (authorObject.getAuthorId() != AUTHOR_DEFAULT_ID) {
+                OVertex vertex = loadAuthor(db, authorObject.getAuthorId());
                 if (vertex != null) {
                     vertices.add(vertex);
                 } else {
-                    logger.warn("Document contained an invalid aothorId [" + author.getAuthorId() + "].");
+                    logger.warn("DocumentObject contained an invalid aothorId [" + authorObject.getAuthorId() + "].");
                 }
                 if (!documentAuthorEdgeExists(existing, vertex)) {
                     addDocumentAuthor(db, document, vertex);
                 }
             } else {
-                OVertex vertex = createAuthor(db, author.getFirstName(), author.getLastName(), author.getEmailAddress());
+                OVertex vertex = createAuthor(db, authorObject.getFirstName(), authorObject.getLastName(), authorObject.getEmailAddress());
                 if (vertex != null) {
                     vertices.add(vertex);
-                    author.setAuthorId(vertex.getProperty(AUTHOR_ID));
+                    authorObject.setAuthorId(vertex.getProperty(AUTHOR_ID));
                 } else {
-                    logger.warn("Cannot add author to store.");
+                    logger.warn("Cannot add authorObject to store.");
                 }
                 addDocumentAuthor(db, document, vertex);
             }
@@ -134,12 +134,12 @@ public class Persistor {
 
     }
 
-    protected void loadDocumentAuthors(ODatabaseSession db, OVertex from, Document document) {
+    protected void loadDocumentAuthors(ODatabaseSession db, OVertex from, DocumentObject documentObject) {
         Iterable<OVertex> existing = from.getVertices(ODirection.OUT, DOCUMENT_AUTHOR_SCHEMA);
         existing.forEach( v -> {
-            Author author = new Author();
-            authorFromVertex(author, v);
-            document.getAuthors().add(author);
+            AuthorObject authorObject = new AuthorObject();
+            authorFromVertex(authorObject, v);
+            documentObject.getAuthors().add(authorObject);
         });
     }
 }

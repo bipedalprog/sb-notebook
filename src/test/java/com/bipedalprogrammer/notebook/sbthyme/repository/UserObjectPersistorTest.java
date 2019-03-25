@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.User;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.UserObject;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserPersistorTest {
+public class UserObjectPersistorTest {
     public static final String TEST_USER = "testuser@example.com";
     public static final String TEST_PASSWORD = "chooseWisely";
 
@@ -24,7 +24,7 @@ public class UserPersistorTest {
 
     @After
     public void prepareTestTable() {
-        List<User> priors = persistence.findAll();
+        List<UserObject> priors = persistence.findAll();
         priors.forEach(u -> persistence.delete(u));
     }
 

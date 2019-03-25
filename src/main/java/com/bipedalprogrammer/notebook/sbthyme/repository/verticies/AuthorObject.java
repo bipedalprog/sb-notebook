@@ -1,15 +1,15 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository.verticies;
 
-public class Author {
+public class AuthorObject {
     public static long AUTHOR_DEFAULT_ID = -1L;
     private long authorId = AUTHOR_DEFAULT_ID;
     private String firstName;
     private String lastName;
     private String emailAddress;
 
-    public Author() {}
+    public AuthorObject() {}
 
-    public Author(String firstName, String lastName, String emailAddress) {
+    public AuthorObject(String firstName, String lastName, String emailAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;

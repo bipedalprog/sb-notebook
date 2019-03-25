@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Notebook;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.NotebookObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
@@ -30,7 +30,7 @@ public class NotebookPersistence extends Persistor {
         super(store);
     }
 
-    public Notebook create(String title, String basePath) {
+    public NotebookObject create(String title, String basePath) {
         try (ODatabaseSession db = orientStore.getSession()) {
             if (doesNotebookExist(db, title)) {
                 throw new NotebookExistsException(title);
@@ -57,24 +57,24 @@ public class NotebookPersistence extends Persistor {
         return null;
     }
 
-    public List<Notebook> getNotebooks() {
-        List<Notebook> notebooks = new ArrayList<>();
+    public List<NotebookObject> getNotebooks() {
+        List<NotebookObject> notebookObjects = new ArrayList<>();
         try (ODatabaseSession db = orientStore.getSession()) {
             try (OResultSet resultSet = db.query(FIND_ALL_NOTEBOOKS)) {
                 while (resultSet.hasNext()) {
                     Optional<OVertex> next = resultSet.next().getVertex();
                     next.ifPresent(v -> {
-                        notebooks.add(notebookFromVertex(v));
+                        notebookObjects.add(notebookFromVertex(v));
                     });
                 }
             }
         }
-        return notebooks;
+        return notebookObjects;
     }
 
-    public boolean delete(Notebook notebook) {
+    public boolean delete(NotebookObject notebookObject) {
         try (ODatabaseSession db = orientStore.getSession()) {
-            OVertex vertex = loadNotebook(db, notebook.getNotebookId());
+            OVertex vertex = loadNotebook(db, notebookObject.getNotebookId());
             if (vertex != null) {
                 db.delete(vertex);
                 return true;
@@ -82,7 +82,7 @@ public class NotebookPersistence extends Persistor {
                 return false;
             }
         } catch (Exception e) {
-            logger.warn("Delete notebook failed.");
+            logger.warn("Delete notebookObject failed.");
             return false;
         }
     }
@@ -93,14 +93,14 @@ public class NotebookPersistence extends Persistor {
         }
     }
 
-    private Notebook notebookFromVertex(OVertex vertex) {
-        Notebook notebook = new Notebook();
-        notebook.setNotebookId(vertex.getProperty(NOTEBOOK_ID).toString());
-        notebook.setTitle(vertex.getProperty(NOTEBOOK_TITLE));
-        notebook.setBasePath(vertex.getProperty(NOTEBOOK_BASEPATH));
-        notebook.setCreated(vertex.getProperty(NOTEBOOK_CREATED));
-        notebook.setUpdated(vertex.getProperty(NOTEBOOK_UPDATED));
-        return notebook;
+    private NotebookObject notebookFromVertex(OVertex vertex) {
+        NotebookObject notebookObject = new NotebookObject();
+        notebookObject.setNotebookId(vertex.getProperty(NOTEBOOK_ID).toString());
+        notebookObject.setTitle(vertex.getProperty(NOTEBOOK_TITLE));
+        notebookObject.setBasePath(vertex.getProperty(NOTEBOOK_BASEPATH));
+        notebookObject.setCreated(vertex.getProperty(NOTEBOOK_CREATED));
+        notebookObject.setUpdated(vertex.getProperty(NOTEBOOK_UPDATED));
+        return notebookObject;
     }
 
     private OVertex loadNotebook(ODatabaseSession db, String notebookId) {

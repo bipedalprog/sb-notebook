@@ -2,14 +2,14 @@ package com.bipedalprogrammer.notebook.sbthyme.repository.verticies;
 
 import java.util.Date;
 
-public class Notebook {
+public class NotebookObject {
     private String notebookId;
     private String title;
     private Date created;
     private Date updated;
     private String basePath;
 
-    public Notebook() {
+    public NotebookObject() {
         super();
     }
 

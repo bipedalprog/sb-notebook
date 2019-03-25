@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Author;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.AuthorObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -31,46 +31,46 @@ public class AuthorPersistence extends Persistor {
         super(orientStore);
     }
 
-    public Author newAuthor(String firstName, String lastName, String emailAddress) {
+    public AuthorObject newAuthor(String firstName, String lastName, String emailAddress) {
         try (ODatabaseSession db = orientStore.getSession()) {
             OVertex vertex = createAuthor(db, firstName, lastName, emailAddress);
-            Author author = new Author(firstName, lastName, emailAddress);
-            author.setAuthorId(vertex.getProperty(AUTHOR_ID));
-            return author;
+            AuthorObject authorObject = new AuthorObject(firstName, lastName, emailAddress);
+            authorObject.setAuthorId(vertex.getProperty(AUTHOR_ID));
+            return authorObject;
         } catch (Exception ex) {
             logger.info("Cannot create author.", ex);
         }
         return null;
     }
 
-    public Author update(Author author) {
+    public AuthorObject update(AuthorObject authorObject) {
 
         try (ODatabaseSession db = orientStore.getSession()) {
-            OVertex vertex = loadAuthor(db, author.getAuthorId());
-            vertex.setProperty(AUTHOR_FIRST_NAME, author.getFirstName());
-            vertex.setProperty(AUTHOR_LAST_NAME, author.getLastName());
-            vertex.setProperty(AUTHOR_EMAIL, author.getEmailAddress());
+            OVertex vertex = loadAuthor(db, authorObject.getAuthorId());
+            vertex.setProperty(AUTHOR_FIRST_NAME, authorObject.getFirstName());
+            vertex.setProperty(AUTHOR_LAST_NAME, authorObject.getLastName());
+            vertex.setProperty(AUTHOR_EMAIL, authorObject.getEmailAddress());
             db.save(vertex);
         } catch (Exception ex) {
-            logger.info("Unable to save author.", ex);
+            logger.info("Unable to save authorObject.", ex);
         }
 
-        return author;
+        return authorObject;
 
     }
 
-    public Author findByEmailAddress(String emailAddress) {
+    public AuthorObject findByEmailAddress(String emailAddress) {
         try (ODatabaseSession db = orientStore.getSession()) {
             OResultSet resultSet = db.query(FIND_BY_EMAIL_ADDRESS, emailAddress);
-            Author author = new Author();
+            AuthorObject authorObject = new AuthorObject();
             if (resultSet.hasNext()) {
                 OResult result = resultSet.next();
                 result.getVertex().ifPresent(v -> {
-                    authorFromVertex(author, v);
+                    authorFromVertex(authorObject, v);
                 });
             }
             resultSet.close();
-            return author;
+            return authorObject;
         } catch (Exception ex) {
             logger.info("Unable to save author.", ex);
         }
@@ -78,39 +78,39 @@ public class AuthorPersistence extends Persistor {
         return null;
     }
 
-    public List<Author> findAuthorByName(String firstName, String lastName) {
-        List<Author> authors = new ArrayList<>();
+    public List<AuthorObject> findAuthorByName(String firstName, String lastName) {
+        List<AuthorObject> authorObjects = new ArrayList<>();
         try (ODatabaseSession db = orientStore.getSession()) {
             try (OResultSet rs = db.query(FIND_BY_NAME, firstName, lastName)) {
                 while (rs.hasNext()) {
                     rs.next().getVertex().ifPresent(v -> {
-                        Author author = new Author();
-                        authorFromVertex(author, v);
-                        authors.add(author);
+                        AuthorObject authorObject = new AuthorObject();
+                        authorFromVertex(authorObject, v);
+                        authorObjects.add(authorObject);
                     });
                 }
             }
         }
-        return authors;
+        return authorObjects;
     }
 
-    public List<Author> findAllAuthors() {
-        List<Author> authors = new ArrayList<Author>();
+    public List<AuthorObject> findAllAuthors() {
+        List<AuthorObject> authorObjects = new ArrayList<AuthorObject>();
         try (ODatabaseSession db = orientStore.getSession()) {
             for (ODocument doc : db.browseClass(AUTHOR_SCHEMA)) {
                 doc.asVertex().ifPresent(v -> {
-                    Author author = new Author();
-                    authorFromVertex(author, v);
-                    authors.add(author);
+                    AuthorObject authorObject = new AuthorObject();
+                    authorFromVertex(authorObject, v);
+                    authorObjects.add(authorObject);
                 });
             }
         }
-        return authors;
+        return authorObjects;
     }
 
-    public boolean delete(Author author) {
+    public boolean delete(AuthorObject authorObject) {
         try (ODatabaseSession db = orientStore.getSession()) {
-            OVertex vertex = loadAuthor(db, author.getAuthorId());
+            OVertex vertex = loadAuthor(db, authorObject.getAuthorId());
             db.delete(vertex);
         }
         return true;

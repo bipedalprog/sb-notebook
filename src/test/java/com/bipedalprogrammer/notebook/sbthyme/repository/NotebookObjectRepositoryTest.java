@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Notebook;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.NotebookObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,30 +16,30 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class NotebookRepositoryTest {
-    private static final String NOTEBOOK_NAME = "Test Notebook";
+public class NotebookObjectRepositoryTest {
+    private static final String NOTEBOOK_NAME = "Test NotebookObject";
 
     @Autowired
     private NotebookPersistence repository;
 
     @Before
     public void before() {
-        List<Notebook> prior = repository.getNotebooks();
-        for (Notebook notebook : prior) repository.delete(notebook);
+        List<NotebookObject> prior = repository.getNotebooks();
+        for (NotebookObject notebookObject : prior) repository.delete(notebookObject);
     }
 
     @Test
     public void shouldCreateNotebook() {
-        Notebook notebook = repository.create(NOTEBOOK_NAME, "/tmp/notebook");
-        assertNotNull(notebook);
-        assertThat(notebook.getTitle(), equalTo(NOTEBOOK_NAME));
+        NotebookObject notebookObject = repository.create(NOTEBOOK_NAME, "/tmp/notebookObject");
+        assertNotNull(notebookObject);
+        assertThat(notebookObject.getTitle(), equalTo(NOTEBOOK_NAME));
     }
 
     @Test
     public void shouldNotDuplicateTitle() {
-        Notebook notebook = repository.create(NOTEBOOK_NAME, "/tmp/notebook");
+        NotebookObject notebookObject = repository.create(NOTEBOOK_NAME, "/tmp/notebookObject");
         try {
-            Notebook ohno = repository.create(NOTEBOOK_NAME, "/tmp/notebook");
+            NotebookObject ohno = repository.create(NOTEBOOK_NAME, "/tmp/notebookObject");
             fail("Duplicate title should throw exception.");
         } catch (NotebookExistsException e) {
             assertTrue("Yay!", true);

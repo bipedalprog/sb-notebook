@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class User implements UserDetails {
+public class UserObject implements UserDetails {
     public static final String DEFAULT_USER = "default@bipedalprogrammer.com";
     public static final String ROLE_USER = "ROLE_USER";
 
@@ -18,14 +18,14 @@ public class User implements UserDetails {
     private boolean enabled;
     private Set<GrantedAuthority> authorities;
 
-    public User() {
+    public UserObject() {
         email = DEFAULT_USER;
         authorities = new HashSet<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority(ROLE_USER));
         enabled = false;
     }
 
-    public User(String username, String password, boolean enabled) {
+    public UserObject(String username, String password, boolean enabled) {
         this();
         this.email = username;
         this.password = password;

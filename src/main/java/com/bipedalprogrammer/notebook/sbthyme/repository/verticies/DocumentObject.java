@@ -4,15 +4,15 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Document {
+public class DocumentObject {
     private long documentId = -1L;
     private String title;
     private String revision;
     private Date revisionDate;
     private String body;
-    private Set<Author> authors = new HashSet<>();
+    private Set<AuthorObject> authorObjects = new HashSet<>();
 
-    public Document() {}
+    public DocumentObject() {}
 
     public long getDocumentId() {
         return documentId;
@@ -54,11 +54,11 @@ public class Document {
         this.body = body;
     }
 
-    public Set<Author> getAuthors() {
-        return authors;
+    public Set<AuthorObject> getAuthors() {
+        return authorObjects;
     }
 
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+    public void setAuthors(Set<AuthorObject> authorObjects) {
+        this.authorObjects = authorObjects;
     }
 }

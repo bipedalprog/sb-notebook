@@ -1,7 +1,7 @@
 package com.bipedalprogrammer.notebook.sbthyme.service;
 
 import com.bipedalprogrammer.notebook.sbthyme.repository.UserPersistence;
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.User;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.UserObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,13 +17,13 @@ public class LocalUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public User loadUserByUsername(String username)
+    public UserObject loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        User user = userPersistence.findByUsername(username);
-        if (user != null) {
-            return user;
+        UserObject userObject = userPersistence.findByUsername(username);
+        if (userObject != null) {
+            return userObject;
         }
         throw new UsernameNotFoundException(
-                "User '" + username + "' not found");
+                "UserObject '" + username + "' not found");
     }
 }

@@ -1,6 +1,6 @@
 package com.bipedalprogrammer.notebook.sbthyme.repository;
 
-import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.Document;
+import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.DocumentObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -28,51 +28,51 @@ public class DocumentPersistence extends Persistor {
         super(orientStore);
     }
 
-    public Document newDocument(Document document) {
+    public DocumentObject newDocument(DocumentObject documentObject) {
         try (ODatabaseSession db = orientStore.getSession()) {
             Long documentId = db.getMetadata().getSequenceLibrary().getSequence(DOCUMENT_SEQUENCE).next();
             OVertex vertex = db.newVertex(DOCUMENT_SCHEMA);
             vertex.setProperty(DOCUMENT_ID, documentId);
-            setVertexProperties(vertex, document);
+            setVertexProperties(vertex, documentObject);
             db.save(vertex);
-            document.setDocumentId(documentId);
-            Set<OVertex> authors = resolveAuthors(db, vertex, document.getAuthors());
+            documentObject.setDocumentId(documentId);
+            Set<OVertex> authors = resolveAuthors(db, vertex, documentObject.getAuthors());
 
-            return document;
+            return documentObject;
         }
     }
 
-    public Document save(Document document) {
+    public DocumentObject save(DocumentObject documentObject) {
         try (ODatabaseSession db = orientStore.getSession()) {
             AtomicReference<OVertex> vertexRef = new AtomicReference<>();
-            try (OResultSet rs = db.query(FIND_DOCUMENTS_BY_ID, document.getDocumentId())) {
+            try (OResultSet rs = db.query(FIND_DOCUMENTS_BY_ID, documentObject.getDocumentId())) {
                 if (rs.hasNext()) {
                     rs.next().getVertex().ifPresent(v -> {
-                        setVertexProperties(v, document);
+                        setVertexProperties(v, documentObject);
                         vertexRef.set(db.save(v));
                     });
                 } else {
-                    logger.warn("Document id " + document.getDocumentId() + "not found. Save failed.");
+                    logger.warn("DocumentObject id " + documentObject.getDocumentId() + "not found. Save failed.");
                     return null;
                 }
             }
             // TODO See if we have added any authors.
 
-            Set<OVertex> authors = resolveAuthors(db, vertexRef.get(), document.getAuthors());
-            return document;
+            Set<OVertex> authors = resolveAuthors(db, vertexRef.get(), documentObject.getAuthors());
+            return documentObject;
         }
     }
 
-    public List<Document> findAllDocuments() {
+    public List<DocumentObject> findAllDocuments() {
 
         try (ODatabaseSession db = orientStore.getSession()) {
-            List<Document> documents = new ArrayList<>();
+            List<DocumentObject> documentObjects = new ArrayList<>();
             for (ODocument doc : db.browseClass("DOCUMENT_SCHEMA")) {
                 doc.asVertex().ifPresent(v -> {
-                    documents.add(documentFromVertex(v));
+                    documentObjects.add(documentFromVertex(v));
                 });
             }
-            return documents;
+            return documentObjects;
         }
     }
 }
