@@ -2,6 +2,7 @@ package com.bipedalprogrammer.notebook.sbthyme.repository;
 
 import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.DocumentObject;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
+import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.OVertex;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
@@ -74,5 +75,17 @@ public class DocumentPersistence extends Persistor {
             }
             return documentObjects;
         }
+    }
+
+    public boolean deleteAllDocuments() {
+        try (ODatabaseSession db = orientStore.getSession()) {
+            for (ORecord doc : db.browseClass(DOCUMENT_SCHEMA)) {
+                db.delete(doc);
+            }
+        } catch (Exception e) {
+            logger.warn("Unable to delete documents.");
+            return false;
+        }
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package com.bipedalprogrammer.notebook.sbthyme.repository;
 
 import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.AuthorObject;
 import com.bipedalprogrammer.notebook.sbthyme.repository.verticies.DocumentObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,17 @@ public class DocumentObjectRepositoryTest {
     @Autowired
     private DocumentPersistence repository;
 
+    @Before
+    public void before() {
+        repository.deleteAllDocuments();
+    }
+
     @Test
     public void saveShouldAssignId() {
         Set<AuthorObject> authorObjects = new HashSet<>();
         authorObjects.add(new AuthorObject("Sample", "AuthorObject", "sample@example.com"));
         DocumentObject documentObject = new DocumentObject();
-        documentObject.setTitle("A Test DocumentObject");
+        documentObject.setTitle("A Test Document");
         documentObject.setAuthors(authorObjects);
         documentObject.setRevision("1.0");
         documentObject.setRevisionDate(new Date());
@@ -45,7 +51,7 @@ public class DocumentObjectRepositoryTest {
     public void saveShouldRecognizeNewAuthors() {
         // Set up.
         Set<AuthorObject> initialAuthorObjects = new HashSet<>();
-        initialAuthorObjects.add(new AuthorObject("Initial", "AuthorObject", "sample@example.com"));
+        initialAuthorObjects.add(new AuthorObject("Initial", "Author", "sample@example.com"));
         DocumentObject documentObject = new DocumentObject();
         documentObject.setTitle("Additional Authors Test");
         documentObject.setAuthors(initialAuthorObjects);
@@ -56,7 +62,7 @@ public class DocumentObjectRepositoryTest {
         assertNotNull(updated);
 
         // Mutate.
-        updated.getAuthors().add(new AuthorObject("Updated", "AuthorObject", "updated@example.com"));
+        updated.getAuthors().add(new AuthorObject("Updated", "Author", "updated@example.com"));
         DocumentObject mutated = repository.save(updated);
         assertNotNull(mutated);
         assertTrue(mutated.getAuthors().stream()
