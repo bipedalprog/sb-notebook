@@ -1,0 +1,9 @@
+
+orientdb:
+  connectionString: memory:test
+  user: admin
+  password: admin
+
+file-store:
+  protocol: file
+  base-path: /tmp/test
